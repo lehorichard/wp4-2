@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
     res.json({message:  'hello'})
 })
 
-app.post('/user/register', [
+app.post('/api/register', [
     body('username', 'Invalid username').not().isEmpty(),
     body('password', 'Password has to be at least 6 characters long.').isLength({
         min: 6
@@ -69,7 +69,7 @@ app.post('/user/register', [
     }
 })
 
-app.post('/user/login', [
+app.post('/api/login', [
     check("username", "Please enter a valid username.").not().isEmpty(),
     check("password", "Please enter a valid password.").isLength({
       min: 6
@@ -112,7 +112,7 @@ app.post('/user/login', [
     }
 })
 
-app.post('/user/isadmin', auth, async (req, res) => {
+app.post('/api/isadmin', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id)
         if (user.admin)
@@ -126,7 +126,7 @@ app.post('/user/isadmin', auth, async (req, res) => {
     }
 })
 
-app.post('/upload', auth, upload.single('image') , async (req, res) => {
+app.post('/api/upload', auth, upload.single('image') , async (req, res) => {
     if (typeof req.file === 'undefined')
         res.status(400).send({error: 'no image selected'})
     const file = fs.readFileSync(req.file.path)
@@ -150,7 +150,7 @@ app.post('/upload', auth, upload.single('image') , async (req, res) => {
     })
 })
 
-app.get('/user/:id', async (req, res) => {
+app.get('/api/user/:id', async (req, res) => {
     try {        
         const user = await User.findById(req.params.id)
         console.log(req.params.id);
@@ -161,18 +161,18 @@ app.get('/user/:id', async (req, res) => {
         res.send({ message: "Error in Fetching user" })
     }
 })
-app.get('/images', async(req, res) => {
+app.get('/api/images', async(req, res) => {
     Image.find({}).lean().exec((err, docs) => {
         res.send(docs)
     })
 })
 
-app.get('/image/:id', async (req, res) => {
+app.get('/api/image/:id', async (req, res) => {
     const image = await Image.findById(req.params.id)
     res.send(image)
 })
 
-app.delete('/image/', auth, async (req, res) => {
+app.delete('/api/image/', auth, async (req, res) => {
     const image = await Image.findById(req.params.id)
     if (typeof image === 'undefined') {
         res.status(400)
