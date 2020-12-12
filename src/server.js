@@ -116,7 +116,7 @@ app.post('/user/isadmin', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id)
         if (user.admin)
-            res.json(user)
+            res.json(user.admin)
         else
             res.status(400).json({
                 message: 'User is not an admin.'
@@ -173,6 +173,12 @@ app.get('/image/:id', async (req, res) => {
 })
 
 app.delete('/image/', auth, async (req, res) => {
+    const image = await Image.findById(req.params.id)
+    if (typeof image === 'undefined') {
+        res.status(400)
+        res.send({message: 'invalid id'})
+    }
+    if (req.user.admin || image.user.id == req.user.id) {
     Image.deleteOne({ _id: req.body.id}, (err) => {
         if(err) {
             res.status(400)
@@ -183,6 +189,10 @@ app.delete('/image/', auth, async (req, res) => {
             res.send({message: 'success'})
         }
     })
+    } else {
+        res.status(400)
+        res.send({message: 'Can\'t perform that action.'})
+    }
 })
 
 const PORT = process.env.PORT || 3002
