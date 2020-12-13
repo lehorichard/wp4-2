@@ -153,9 +153,11 @@ app.post('/api/upload', auth, upload.single('image') , async (req, res) => {
 app.get('/api/user/:id', async (req, res) => {
     try {        
         const user = await User.findById(req.params.id)
+        if (typeof user === 'undefined')
+            res.status(400).send({message: "Invalid ID."})
         console.log(req.params.id);
-        Image.find({user: { id: req.params.id}}).lean().exec((err, docs) => {
-            res.send(docs)          
+        Image.find({ user: { id: req.params.id }}).lean().exec((err, docs) => {
+            res.status(200).send(docs)          
         })
     } catch (err) {
         res.send({ message: "Error in Fetching user" })
@@ -169,6 +171,8 @@ app.get('/api/images', async(req, res) => {
 
 app.get('/api/image/:id', async (req, res) => {
     const image = await Image.findById(req.params.id)
+    if (typeof image === 'undefined')
+        res.status(400).send({message: "Invalid ID."})
     res.send(image)
 })
 
@@ -190,7 +194,7 @@ app.delete('/api/image/', auth, async (req, res) => {
         }
     })
     } else {
-        res.status(400)
+        res.status(401)
         res.send({message: 'Can\'t perform that action.'})
     }
 })
