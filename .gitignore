@@ -1,2 +1,3 @@
-images/
+images/*
+!images/dontdeleteme
 node_modules/
