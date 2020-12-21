@@ -93,6 +93,7 @@ app.post('/api/login', [
         const isValidPassword = await bcrypt.compare(password, user.password)
         if (!isValidPassword) return res.status(400).json({ message: 'Incorrect password.'})
 
+        const id = user.id
         const payload = {
             user: {
                 id: user.id
@@ -102,7 +103,8 @@ app.post('/api/login', [
             (err, token) => {
                 if (err) throw err
                 res.status(200).json({
-                    token
+                    token,
+                    id
                 })
             }    
         )
