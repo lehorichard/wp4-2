@@ -200,6 +200,21 @@ app.delete('/api/image/', auth, async (req, res) => {
     }
 })
 
+app.post('/api/verify/', async (req, res) => {
+    const token = req.body.token
+    if (!token) return res.status(401).json({ message: "No session token." })
+  try {
+    const decoded = jwt.verify(token, "idk")
+    res.status(200).send()    
+  } catch (e) {
+    // console.error(e);
+    if (e instanceof jwt.TokenExpiredError)
+        res.status(401).send({message: "Token expired"})
+    else
+        res.status(401).send({ message: "Invalid Token" });
+  }
+})
+
 const PORT = process.env.PORT || 3002
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
