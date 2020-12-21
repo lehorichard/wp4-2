@@ -200,6 +200,22 @@ app.put('/api/image/:id', auth, async (req, res) => {
     }
 })
 
+app.get('/api/users/', async (req, res) => {
+    let result = []
+    const allUsers = await User.find({}).lean().exec()
+           
+    for (const u of allUsers) {
+        const uid = u._id
+        const imgs = await Image.find({ user: { id: '' + uid }}).lean().exec()
+        result.push({
+            id: u._id,
+            username: u.username,
+            imgCount: Object.keys(imgs).length ?? 0
+        })
+    }
+    res.status(200).send(result)
+})
+
 app.delete('/api/image/', auth, async (req, res) => {
     const image = await Image.findById(req.params.id)
     if (typeof image === 'undefined') {
