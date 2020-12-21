@@ -209,11 +209,14 @@ app.get('/api/users/', async (req, res) => {
     for (const u of allUsers) {
         const uid = u._id
         const imgs = await Image.find({ user: { id: '' + uid }}).lean().exec()
-        result.push({
-            id: u._id,
-            username: u.username,
-            imgCount: Object.keys(imgs).length ?? 0
-        })
+        const imgCount = Object.keys(imgs).length ?? 0
+        if (imgCount > 0) {
+            result.push({
+                id: u._id,
+                username: u.username,
+                imgCount: imgCount
+            })
+        }
     }
     res.status(200).send(result)
 })
