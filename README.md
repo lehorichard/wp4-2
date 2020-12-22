@@ -23,7 +23,8 @@
 ### Response
 ```
 {
-	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWZkMWI2NDZjMzk3NTBmMWZkY2U4OWNhIn0sImlhdCI6MTYwNzc5MjI3MSwiZXhwIjoxNjA3ODc4NjcxfQ.IK8iL8rGRPv43OuyqNk_zgCjfHEQQvwdXoJpAZmIn2U"
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWZkMWI2NDZjMzk3NTBmMWZkY2U4OWNhIn0sImlhdCI6MTYwNzc5MjI3MSwiZXhwIjoxNjA3ODc4NjcxfQ.IK8iL8rGRPv43OuyqNk_zgCjfHEQQvwdXoJpAZmIn2U",
+	"id": "5fd1b646c39750f1fdce89ca"
 }
 ```
 ## POST /api/upload
@@ -125,8 +126,41 @@
     "__v": 0
 }
 ```
+## PUT /api/image/:id
+### Request
+#### Head
+```
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWZkMWI2NDZjMzk3NTBmMWZkY2U4OWNhIn0sImlhdCI6MTYwNzc5MjI3MSwiZXhwIjoxNjA3ODc4NjcxfQ.IK8iL8rGRPv43OuyqNk_zgCjfHEQQvwdXoJpAZmIn2U"
+}
+```
+### Body
+```
+{
+	"name": "new name",
+	"desc": "new description"
+}
+```
+### Response
+```
+{
+    "img": {
+        "data": {
+            "type": "Buffer",
+            "data": <data>
+        },
+        "contentType": "image/png"
+    },
+    "desc": "new description",
+    "uploadedAt": "2020-12-12T03:55:36.689Z",
+    "_id": "5fd43f90677746c03783ee66",
+    "name": "new name",
+    "__v": 0
+}
+```
 
 ## DELETE /api/images
+### Request
 #### Head
 ```
 {
@@ -157,4 +191,35 @@
 {
 	"message": "Can't perform that action."
 }
+```
+## POST /api/verify
+### Request
+#### Body
+```
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNWZkMWI2NDZjMzk3NTBmMWZkY2U4OWNhIn0sImlhdCI6MTYwNzc5MjI3MSwiZXhwIjoxNjA3ODc4NjcxfQ.IK8iL8rGRPv43OuyqNk_zgCjfHEQQvwdXoJpAZmIn2U"
+}
+```
+### Response
+
+#### 200
+#### 401
+```
+{ "message": "Token expired"} || { "message": "Invalid token" }
+```
+## GET /api/users
+### Response
+```
+[
+    {
+        "id": "5fd1b646c39750f1fdce89ca",
+        "username": "test",
+        "imgCount": 2
+    },
+    {
+        "id": "5fd1b646c39750f1fdce89cb",
+        "username": "test2",
+        "imgCount": 8
+    }
+]
 ```
