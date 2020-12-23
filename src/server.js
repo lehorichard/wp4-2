@@ -210,7 +210,7 @@ app.get('/api/users/', async (req, res) => {
     for (const u of allUsers) {
         const uid = u._id
         const imgs = await Image.find({ user: { id: '' + uid }}).lean().exec()
-        const imgCount = Object.keys(imgs).length ?? 0
+        const imgCount = Object.keys(imgs).length
         if (imgCount > 0) {
             result.push({
                 id: u._id,
