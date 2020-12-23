@@ -19,6 +19,7 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+mongoose.set('useFindAndModify', false);
 //app.use(cors())
 
 app.get('/', (req, res) => {
@@ -92,6 +93,7 @@ app.post('/api/login', [
         const isValidPassword = await bcrypt.compare(password, user.password)
         if (!isValidPassword) return res.status(400).json({ message: 'Incorrect password.'})
 
+        const id = user.id
         const payload = {
             user: {
                 id: user.id
@@ -101,7 +103,8 @@ app.post('/api/login', [
             (err, token) => {
                 if (err) throw err
                 res.status(200).json({
-                    token
+                    token,
+                    id
                 })
             }    
         )
@@ -177,6 +180,47 @@ app.get('/api/image/:id', async (req, res) => {
     res.send(image)
 })
 
+app.put('/api/image/:id', auth, async (req, res) => {
+    const image = await Image.findById(req.params.id)
+    const user = await User.findById(req.user.id)
+    if (typeof image === 'undefined') {
+        res.status(400)
+        res.send({message: 'invalid id'})
+    }
+    if (user.admin || image.user.id === req.user.id) {
+        const data = {
+            name: req.body.name,
+            desc: req.body.desc
+        }
+        Image.findOneAndUpdate({_id: image._id}, data, (err, img) => {
+            if (err) return res.send(500, {error: err})
+            return res.status(200).send(img)
+        })
+    } else {
+        res.status(401)
+        res.send({message: 'Can\'t perform that action.'})
+    }
+})
+
+app.get('/api/users/', async (req, res) => {
+    let result = []
+    const allUsers = await User.find({}).lean().exec()
+           
+    for (const u of allUsers) {
+        const uid = u._id
+        const imgs = await Image.find({ user: { id: '' + uid }}).lean().exec()
+        const imgCount = Object.keys(imgs).length ?? 0
+        if (imgCount > 0) {
+            result.push({
+                id: u._id,
+                username: u.username,
+                imgCount: imgCount
+            })
+        }
+    }
+    res.status(200).send(result)
+})
+
 app.delete('/api/image/', auth, async (req, res) => {
     const image = await Image.findById(req.params.id)
     if (typeof image === 'undefined') {
@@ -197,6 +241,21 @@ app.delete('/api/image/', auth, async (req, res) => {
     } else {
         res.status(401)
         res.send({message: 'Can\'t perform that action.'})
+    }
+})
+
+app.post('/api/verify/', async (req, res) => {
+    const token = req.body.token
+    if (!token) return res.status(401).json({ message: "No session token." })
+    try {
+        jwt.verify(token, "idk")
+        res.status(200).send()    
+    } catch (e) {
+        // console.error(e);
+        if (e instanceof jwt.TokenExpiredError)
+            res.status(401).send({message: "Token expired"})
+        else
+            res.status(401).send({ message: "Invalid Token" });
     }
 })
 
