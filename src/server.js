@@ -1,5 +1,5 @@
 const express = require('express')
-//const cors = require('cors')
+const cors = require('cors')
 const app = express()
 const fs = require('fs')
 const path = require('path')
@@ -20,7 +20,8 @@ require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 mongoose.set('useFindAndModify', false);
-//app.use(cors())
+app.use(cors())
+app.options('*', cors())
 
 app.get('/', (req, res) => {
     res.json({message:  'hello'})
