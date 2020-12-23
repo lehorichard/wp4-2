@@ -12,7 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   { path: 'image-list', component: ImageListComponent },
-  { path: 'image-view', component: ImageViewComponent },
+  { path: 'image-view/:imageId', component: ImageViewComponent },
   { path: 'image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },
   { path: 'image-edit', component: ImageEditComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent },

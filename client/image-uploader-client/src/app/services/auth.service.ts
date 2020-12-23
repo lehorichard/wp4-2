@@ -1,55 +1,58 @@
-import { Injectable } from '@angular/core';
-import { UserData } from '../models/UserData';
-import { environment } from '../../environments/environment'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {UserData} from '../models/UserData';
+import {environment} from '../../environments/environment';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {map, catchError} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-type': 'application/json' }),
+  headers: new HttpHeaders({'Content-type': 'application/json'}),
   observe: 'response' as 'response'
-}
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  userData: UserData = {
-    userId: '',
-    token: ''
-  }
-  constructor(
-    private http: HttpClient
-  ) {
+
+  constructor(private http: HttpClient) {
     if (sessionStorage.getItem('userData') != null) {
-      var data = JSON.parse(sessionStorage.getItem('userData'));
+      const data = JSON.parse(sessionStorage.getItem('userData'));
       this.userData.userId = data.userId;
       this.userData.token = data.token;
     }
   }
 
+  userData: UserData = {
+    userId: '',
+    token: ''
+  };
+
+  private static setSession(userData: UserData): void {
+    sessionStorage.setItem('userData', JSON.stringify(userData));
+  }
+
   verifyAuth(): Observable<boolean> {
     if (this.userData.token != '') {
-      return this.http.post(`${environment.apiBaseUrl}/verify`, { token: this.userData.token }, httpOptions).pipe(
+      return this.http.post(`${environment.apiBaseUrl}/verify`, {token: this.userData.token}, httpOptions).pipe(
         map(res => {
           return true;
         }),
         catchError(err => {
           this.clearSession();
-          return of(false)
+          return of(false);
         })
       );
-    }
-    else {
+    } else {
       return of(false);
     }
   }
 
   login(username: string, password: string): Observable<boolean> {
-    return this.http.post(`${environment.apiBaseUrl}/login`, { username: username, password: password }, httpOptions).pipe(
+    return this.http.post(`${environment.apiBaseUrl}/login`, {username, password}, httpOptions).pipe(
       map(res => {
-        var response = res.body as { token: string, id: string };
-        var userData: UserData = {
+        const response = res.body as { token: string, id: string };
+        const userData: UserData = {
           userId: '',
           token: null
         };
@@ -58,7 +61,7 @@ export class AuthService {
         userData.token = response.token;
 
         if (userData.token != '') {
-          this.setSession(userData);
+          AuthService.setSession(userData);
           return true;
         }
         return false;
@@ -66,21 +69,18 @@ export class AuthService {
   }
 
   register(username: string, password: string) {
-    return this.http.post(`${environment.apiBaseUrl}/register`, { username: username, password: password }, httpOptions)
+    return this.http.post(`${environment.apiBaseUrl}/register`, {username, password}, httpOptions);
   }
 
-  logout() {
+  logout(): void {
     this.clearSession();
   }
 
-  private setSession(userData: UserData) {
-    sessionStorage.setItem('userData', JSON.stringify(userData));
-  }
-  private clearSession() {
+  private clearSession(): void {
     sessionStorage.removeItem('userData');
     this.userData = {
       userId: '',
       token: ''
-    }
+    };
   }
 }

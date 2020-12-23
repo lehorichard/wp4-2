@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.authService.login(this.username, this.password).subscribe(res => {
       if (res) {
-        this.flashMessage.show('Succesful login!', { cssClass: 'alert-success', timeout: 4000 });
+        this.flashMessage.show('Successful login!', { cssClass: 'alert-success', timeout: 4000 });
 
         this.router.navigate(['/']);
         window.location.reload();
