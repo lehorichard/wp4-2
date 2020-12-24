@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "preinstall": "npm install -g @angular/cli && npm i @angular/compiler-cli && npm i -g typescript",
-    "start": "cd ./client/image-uploader-client/ && npm install && ng build && cd ../../ && node ./src/server.js",
+    "start": "node ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
