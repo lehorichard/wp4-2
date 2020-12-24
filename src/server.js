@@ -144,7 +144,7 @@ app.post('/api/upload', auth, async (req, res) => {
         desc: req.body.desc,
         img: {
             data: file,
-            contentType: (await FileType.fromBuffer(file)).mime
+            contentType: (await FileType.fromFile(file)).mime
         },
         user: req.user
     }
