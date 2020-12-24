@@ -19,7 +19,9 @@ const mongoose = require('mongoose')
 require('dotenv').config()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-mongoose.set('useFindAndModify', false);
+app.use(express.json({limit: '50mb'}))
+app.use(express.urlencoded({limit: '50mb'}))
+mongoose.set('useFindAndModify', false)
 app.use(cors())
 app.options('*', cors())
 
@@ -154,7 +156,7 @@ app.post('/api/upload', auth, async (req, res) => {
         default:
             type = 'application/octet-stream'
     }
-    
+
     fs.writeFileSync('./images/image',fileString, 'base64', (err) => {
         console.log(err)
     })
