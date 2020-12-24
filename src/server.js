@@ -295,6 +295,11 @@ app.post('/api/verify/', async (req, res) => {
     }
 })
 
+const root = require('app-root-path')
+app.get('*', async (req, res) => {
+    res.sendFile(root + '/build/index.html')
+})
+
 const PORT = process.env.PORT || 3002
 app.listen(PORT, () => {
     console.log(`Server running on ${PORT}`)
