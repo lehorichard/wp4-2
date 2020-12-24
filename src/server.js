@@ -222,7 +222,7 @@ app.get('/api/users/', async (req, res) => {
     res.status(200).send(result)
 })
 
-app.delete('/api/image/', auth, async (req, res) => {
+app.delete('/api/image/:id', auth, async (req, res) => {
     const image = await Image.findById(req.params.id)
     if (typeof image === 'undefined') {
         res.status(400)
