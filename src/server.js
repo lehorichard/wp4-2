@@ -142,7 +142,8 @@ app.post('/api/upload', auth, async (req, res) => {
 
     const fileString = req.body.image.replace('data:application/octet-stream;base64','')
                                      .replace('data:image/jpeg;base64','')
-
+                                     .replace('data:image/webp;base64','')
+                                     .replace('data:image/gif;base64','')
     let type = 'image/'
     switch (fileString.charAt(0)) {
         case '/':
