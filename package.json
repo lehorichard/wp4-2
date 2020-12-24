@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preinstall": "npm install -g @angular/cli",
-    "start": "cd ./client/image-uploader-client/ && ng build && cd ../../ && node ./src/server.js",
+    "start": "cd ./client/image-uploader-client/ && npm install && ng build && cd ../../ && node ./src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
