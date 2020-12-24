@@ -185,7 +185,7 @@ app.post('/api/upload', auth, async (req, res) => {
         else {
             item.save()
             res.status(200)
-            res.send({message: 'success'})
+            res.send({ id: item.id })
         }        
     })
 })
