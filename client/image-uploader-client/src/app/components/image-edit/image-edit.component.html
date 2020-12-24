@@ -1,1 +1,21 @@
-<p>image-edit works!</p>
+<div class="card" *ngIf="!loading">
+  <div class="card-header">
+    <div class="row">
+      <input type="text" class="col-auto mr-auto form-control w-50" placeholder="Name" [(ngModel)]="name">
+      <div class="col-auto d-flex">
+        <button class="btn btn-success mr-2" (click)="updateImage(image._id)">Save</button>
+      </div>
+    </div>
+
+  </div>
+  <div class="card-body pb-5">
+    <div class="row justify-content-md-center">
+      <img class="col-12 col-md-12 col-lg-6" [src]="'data:image/jpg;base64,' + image.img.data">
+      <div class="col-12 col-md-12 col-lg-6">
+        <h4>Description</h4>
+        <textarea class="form-control" style="height:90%; resize: vertical;" [(ngModel)]="description"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 *ngIf="loading">Loading...</h3>

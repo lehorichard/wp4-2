@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ImageService} from '../../services/image.service';
 import {Image} from '../../models/Image';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-image-list',
@@ -11,16 +10,12 @@ import {Router} from '@angular/router';
 export class ImageListComponent implements OnInit {
   images: Image[];
 
-  constructor(private router: Router, private imageService: ImageService) {
+  constructor(private imageService: ImageService) {
   }
 
   ngOnInit(): void {
     this.imageService.getImages().subscribe(images => {
       this.images = images.body;
     });
-  }
-
-  imageView(id: string): void {
-    this.router.navigate(['image-view', id]);
   }
 }

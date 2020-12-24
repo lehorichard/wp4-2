@@ -1,0 +1,8 @@
+<div class="masonry-wrapper">
+  <div class="masonry">
+    <div class="masonry-item" *ngFor="let image of images">
+      <img [src]="'data:image/jpg;base64,' + image.img.data" class="masonry-content">
+      <div class="overlay" (click)="imageView(image._id)">{{image.name}}</div>
+    </div>
+  </div>
+</div>

@@ -21,7 +21,7 @@
                 <a routerLink="/register" class="nav-link">Register</a>
             </li>
             <li *ngIf="isLoggedIn" class="nav-item">
-                <a [routerLink]="['/user-images', userId]" class="nav-link">Own images</a>
+                <a [routerLink]="['/user-images', userId, 'Own']" class="nav-link">Own images</a>
             </li>
             <li *ngIf="isLoggedIn" class="nav-item">
                 <a routerLink="/image-upload" class="nav-link">Upload image</a>

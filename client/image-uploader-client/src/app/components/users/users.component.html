@@ -1,1 +1,15 @@
-<p>users works!</p>
+<h1>Users</h1>
+<table class="table table-light text-center">
+  <tr>
+    <th>Name</th>
+    <th>Image count</th>
+    <th></th>
+  </tr>
+  <tr *ngFor="let user of users">
+    <td>{{user.username}}</td>
+    <td>{{user.imgCount}}</td>
+    <td>
+      <a class="btn btn-success" href="/user-images/{{user.id}}/{{user.username}}">View images</a>
+    </td>
+  </tr>
+</table>

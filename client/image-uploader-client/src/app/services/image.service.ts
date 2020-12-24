@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Image} from '../models/Image';
+import {AuthService} from './auth.service';
 
 const httpOptions = {
   headers: new HttpHeaders({'Content-type': 'application/json'}),
@@ -14,7 +15,7 @@ const httpOptions = {
 })
 export class ImageService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
   }
 
   getImages(): Observable<HttpResponse<Image[]>> {
@@ -23,5 +24,20 @@ export class ImageService {
 
   getImage(id: string): Observable<HttpResponse<Image>> {
     return this.http.get<Image>(`${environment.apiBaseUrl}/image/${id}`, httpOptions);
+  }
+
+  postImage(image: string, name: string, desc: string): void {
+    const options = new HttpHeaders({'Content-type': 'application/json', token: this.authService.userData.token});
+    this.http.post(`${environment.apiBaseUrl}/upload`, {image, name, desc}, {headers: options, observe: 'response' as 'response'});
+  }
+
+  updateImage(id: string, name: string, desc: string): Observable<HttpResponse<object>> {
+    const options = new HttpHeaders({'Content-type': 'application/json', token: this.authService.userData.token});
+    return this.http.put(`${environment.apiBaseUrl}/image/${id}`, {name, desc}, {headers: options, observe: 'response' as 'response'});
+  }
+
+  deleteImage(id: string): Observable<HttpResponse<object>> {
+    const options = new HttpHeaders({'Content-type': 'application/json', token: this.authService.userData.token});
+    return this.http.delete(`${environment.apiBaseUrl}/image/${id}`, {headers: options, observe: 'response' as 'response'});
   }
 }

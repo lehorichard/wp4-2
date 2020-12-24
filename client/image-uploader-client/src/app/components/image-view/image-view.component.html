@@ -1,1 +1,25 @@
-<p>image-view works!</p>
+<div class="card" *ngIf="!loading">
+  <div class="card-header">
+    <div class="row">
+      <h2 class="col-auto mr-auto">{{image.name}}</h2>
+      <div class="col-auto d-flex" *ngIf="ownImage">
+        <button class="btn btn-info mr-2"><a class="text-decoration-none text-white" href="image-edit/{{image._id}}">
+          Update</a></button>
+        <button class="btn btn-danger" (click)="deleteImage(image._id)">
+          <fa-icon [icon]="faTimes"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <img class="col-12 col-md-8" [src]="'data:image/jpg;base64,' + image.img.data">
+      <div class="col-12 col-md-4">
+        <h4>Description</h4>
+        <p>{{image.desc}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<h3 *ngIf="loading">Loading...</h3>

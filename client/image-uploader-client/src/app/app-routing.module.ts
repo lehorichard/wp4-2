@@ -14,9 +14,9 @@ const routes: Routes = [
   { path: 'image-list', component: ImageListComponent },
   { path: 'image-view/:imageId', component: ImageViewComponent },
   { path: 'image-upload', component: ImageUploadComponent, canActivate: [AuthGuard] },
-  { path: 'image-edit', component: ImageEditComponent, canActivate: [AuthGuard] },
+  { path: 'image-edit/:imageId', component: ImageEditComponent, canActivate: [AuthGuard] },
   { path: 'users', component: UsersComponent },
-  { path: 'user-images/:userId', component: UserImagesComponent },
+  { path: 'user-images/:userId/:userName', component: UserImagesComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: '', redirectTo: 'image-list', pathMatch: 'full' }

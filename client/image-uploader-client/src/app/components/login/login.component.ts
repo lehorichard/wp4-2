@@ -15,14 +15,14 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  isLoggedIn: boolean = false;
+  isLoggedIn = false;
   constructor(
     private authService: AuthService,
     private flashMessage: FlashMessagesService,
     private router: Router
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.authService.verifyAuth().subscribe(res => {
       if (res) {
         this.isLoggedIn = true;
@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.authService.login(this.username, this.password).subscribe(res => {
       if (res) {
         this.flashMessage.show('Successful login!', { cssClass: 'alert-success', timeout: 4000 });
