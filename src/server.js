@@ -17,10 +17,14 @@ const user = require('./models/user')
 const mongoose = require('mongoose')
 
 require('dotenv').config()
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    parameterLimit: 100000,
+    limit: '50mb',
+    extended: true 
+}))
 app.use(bodyParser.json())
 app.use(express.json({limit: '50mb'}))
-app.use(express.urlencoded({limit: '50mb'}))
+//app.use(express.urlencoded({limit: '50mb'}))
 mongoose.set('useFindAndModify', false)
 app.use(cors())
 app.options('*', cors())
