@@ -135,7 +135,9 @@ app.post('/api/upload', auth, async (req, res) => {
     //if (typeof req.file === 'undefined')
         //res.status(400).send({error: 'no image selected'})
     //const file = fs.readFileSync(req.file.path)
-    fs.writeFileSync('./images/image', req.body.image, 'base64', (err) => {
+    fs.writeFileSync('./images/image',
+                    req.body.image.replace('data:application/octet-stream;base64,',
+                    ''), 'base64', (err) => {
         console.log(err)
     })
     const file = fs.readFileSync('./images/image')
