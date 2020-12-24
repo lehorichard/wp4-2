@@ -132,12 +132,30 @@ app.post('/api/isadmin', auth, async (req, res) => {
 })
 
 app.post('/api/upload', auth, async (req, res) => {
-    //if (typeof req.file === 'undefined')
-        //res.status(400).send({error: 'no image selected'})
-    //const file = fs.readFileSync(req.file.path)
-    fs.writeFileSync('./images/image',
-                    req.body.image.replace('data:application/octet-stream;base64,',
-                    ''), 'base64', (err) => {
+    if (typeof req.body.image === 'undefined')
+        res.status(400).send({error: 'no image selected'})
+
+    const fileString = req.body.image.replace('data:application/octet-stream;base64','')
+
+    let type = 'image/'
+    switch (fileString.charAt(0)) {
+        case '/':
+            type.concat('jpeg')
+            break
+        case 'i':
+            type.concat('png')
+            break
+        case 'R':
+            type.concat('gif')
+            break
+        case 'U':
+            type.concat('webp')
+            break
+        default:
+            type = 'application/octet-stream'
+    }
+    
+    fs.writeFileSync('./images/image',fileString, 'base64', (err) => {
         console.log(err)
     })
     const file = fs.readFileSync('./images/image')
@@ -146,14 +164,16 @@ app.post('/api/upload', auth, async (req, res) => {
         desc: req.body.desc,
         img: {
             data: file,
-            //contentType: (await FileType.fromFile(file)).mime
-            contentType: 'image/png'
+            contentType: type
         },
         user: req.user
     }
-    console.log(obj);
+
     Image.create(obj, (err, item) => {
-        if (err) console.log(err)
+        if (err) {
+            console.log(err)
+            res.status(500).send({message: 'Couldn\'t upload image.'})
+        }
         else {
             item.save()
             res.status(200)
@@ -172,7 +192,7 @@ app.get('/api/user/:id', async (req, res) => {
             res.status(200).send(docs)          
         })
     } catch (err) {
-        res.send({ message: "Error in Fetching user" })
+        res.send({ message: "Error while fetching user" })
     }
 })
 app.get('/api/images', async(req, res) => {
