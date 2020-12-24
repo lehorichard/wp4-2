@@ -26,9 +26,11 @@ export class ImageService {
     return this.http.get<Image>(`${environment.apiBaseUrl}/image/${id}`, httpOptions);
   }
 
-  postImage(image: string, name: string, desc: string): void {
+  postImage(image: string, name: string, desc: string): Observable<HttpResponse<object>> {
     const options = new HttpHeaders({'Content-type': 'application/json', token: this.authService.userData.token});
-    this.http.post(`${environment.apiBaseUrl}/upload`, {image, name, desc}, {headers: options, observe: 'response' as 'response'});
+    const body = {image, name, desc};
+    console.log(body);
+    return this.http.post(`${environment.apiBaseUrl}/upload`, body, {headers: options, observe: 'response' as 'response'});
   }
 
   updateImage(id: string, name: string, desc: string): Observable<HttpResponse<object>> {

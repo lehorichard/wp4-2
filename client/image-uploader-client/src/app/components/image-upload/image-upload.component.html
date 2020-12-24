@@ -1,1 +1,38 @@
-<p>image-upload works!</p>
+<div class="card card-body">
+  <form #imageForm="ngForm">
+    <div class="form-group">
+      <div class="row">
+        <div class="col-11"><h3>Image upload</h3></div>
+        <button (click)="clear()" class="btn btn-warning col-1">Clear</button>
+      </div>
+      <label>Name</label>
+      <input type="text" [(ngModel)]="name" [ngClass]="{'is-invalid':imageName.errors && imageName.touched}"
+             class="form-control" name="Name" #imageName="ngModel" required minlength="2">
+      <div [hidden]="!imageName.errors?.required" class="invalid-feedback"> Name is required</div>
+      <div [hidden]="!imageName.errors?.minlength" class="invalid-feedback"> Must be at least 2 characters</div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea [(ngModel)]="description" [ngClass]="{'is-invalid':imageDesc.errors && imageDesc.touched}"
+                class="form-control" name="Description" #imageDesc="ngModel" required minlength="2">
+      </textarea>
+      <div [hidden]="!imageDesc.errors?.required" class="invalid-feedback"> Description is required</div>
+      <div [hidden]="!imageDesc.errors?.minlength" class="invalid-feedback"> Must be at least 2 characters</div>
+    </div>
+    <label class="mt-1">Picture</label>
+    <div class="input-group mb-2">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="inputGroupFileAddon">Upload</span>
+      </div>
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile" name="picture" (change)="onFileChanged($event)"
+               aria-describedby="inputGroupFileAddon">
+        <label class="custom-file-label" for="inputGroupFile">Choose file</label>
+      </div>
+    </div>
+    <button (click)="onSubmit()" [disabled]="!imageForm.form.valid" class="btn btn-dark col-12 my-2">
+      Upload New Image
+    </button>
+  </form>
+  <img *ngIf="pictureSet" [src]="picture">
+</div>
