@@ -24,6 +24,7 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(express.json({limit: '50mb'}))
+app.use(express.static('build'))
 mongoose.set('useFindAndModify', false)
 app.use(cors())
 app.options('*', cors())
