@@ -24,7 +24,6 @@ app.use(bodyParser.urlencoded({
 }))
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(express.json({limit: '50mb'}))
-//app.use(express.urlencoded({limit: '50mb'}))
 mongoose.set('useFindAndModify', false)
 app.use(cors())
 app.options('*', cors())
@@ -142,6 +141,7 @@ app.post('/api/upload', auth, async (req, res) => {
         res.status(400).send({error: 'no image selected'})
 
     const fileString = req.body.image.replace('data:application/octet-stream;base64','')
+                                     .replace('data:image/jpeg;base64','')
 
     let type = 'image/'
     switch (fileString.charAt(0)) {
