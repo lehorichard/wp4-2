@@ -132,8 +132,8 @@ app.post('/api/isadmin', auth, async (req, res) => {
 })
 
 app.post('/api/upload', auth, async (req, res) => {
-    if (typeof req.file === 'undefined')
-        res.status(400).send({error: 'no image selected'})
+    //if (typeof req.file === 'undefined')
+        //res.status(400).send({error: 'no image selected'})
     //const file = fs.readFileSync(req.file.path)
     fs.writeFileSync('./images/image', req.body.image, 'base64', (err) => {
         console.log(err)
@@ -144,7 +144,8 @@ app.post('/api/upload', auth, async (req, res) => {
         desc: req.body.desc,
         img: {
             data: file,
-            contentType: (await FileType.fromFile(file)).mime
+            //contentType: (await FileType.fromFile(file)).mime
+            contentType: 'image/png'
         },
         user: req.user
     }
