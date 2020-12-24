@@ -229,7 +229,7 @@ app.delete('/api/image/:id', auth, async (req, res) => {
         res.send({message: 'invalid id'})
     }
     if (req.user.admin || image.user.id == req.user.id) {
-    Image.deleteOne({ _id: req.body.id}, (err) => {
+    Image.deleteOne({ _id: req.params.id}, (err) => {
         if(err) {
             res.status(400)
             res.send({message: 'invalid id'})
