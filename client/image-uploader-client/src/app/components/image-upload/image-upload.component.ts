@@ -1,6 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ImageService} from '../../services/image.service';
 import {FlashMessagesService} from 'angular2-flash-messages';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-image-upload',
@@ -16,7 +17,8 @@ export class ImageUploadComponent implements OnInit {
 
   constructor(
     private imageService: ImageService,
-    private flashMessage: FlashMessagesService
+    private flashMessage: FlashMessagesService,
+    private router: Router
   ) {
   }
 
@@ -34,9 +36,9 @@ export class ImageUploadComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.imageService.postImage(this.picture, this.name, this.description).subscribe(() => {
+    this.imageService.postImage(this.picture, this.name, this.description).subscribe(res => {
         this.flashMessage.show('Image successfully added', {cssClass: 'alert-success', timeout: 4000});
-        this.clear();
+        this.router.navigate(['image-view', res.body.id]);
       },
       err => {
         this.flashMessage.show(err.message, {cssClass: 'alert-danger', timeout: 4000});
