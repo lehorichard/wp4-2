@@ -141,7 +141,7 @@ app.post('/api/upload', auth, async (req, res) => {
     if (typeof req.body.image === 'undefined')
         res.status(400).send({error: 'no image selected'})
 
-    const fileString = req.body.image.replace('data:application/octet-stream;base64','')
+    const fileString = req.body.image.replace('data:image/png;base64','')
                                      .replace('data:image/jpeg;base64','')
                                      .replace('data:image/webp;base64','')
                                      .replace('data:image/gif;base64','')
