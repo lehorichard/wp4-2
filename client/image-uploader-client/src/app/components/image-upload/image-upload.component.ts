@@ -38,7 +38,8 @@ export class ImageUploadComponent implements OnInit {
   onSubmit(): void {
     this.imageService.postImage(this.picture, this.name, this.description).subscribe(res => {
         this.flashMessage.show('Image successfully added', {cssClass: 'alert-success', timeout: 4000});
-        this.router.navigate(['image-view', res.body.id]);
+        const response = res.body as { id: string }
+        this.router.navigate(['image-view', response.id]);
       },
       err => {
         this.flashMessage.show(err.message, {cssClass: 'alert-danger', timeout: 4000});
